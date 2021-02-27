@@ -1,0 +1,53 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+resources:
+- repo: self
+  clean: true
+
+trigger:
+- master
+
+variables:
+  service: "booking"
+  tier: "frontend"
+  build: $(Build.BuildId)
+
+stages:
+- stage: SandBox
+  jobs:
+  - job: SandBoxJob
+    steps:
+    - script: echo ArtifactStagingDirectory $(Build.ArtifactStagingDirectory)
+    - script: echo SourcesDirectory $(Build.SourcesDirectory)
+    - script: echo DefinitionId $(Build.DefinitionId)
+    - script: echo DefinitionName $(Build.DefinitionName)
+    - script: echo BuildNumber $(Build.BuildNumber)
+    - script: echo BuildId $(Build.BuildId)
+    - script: echo BuildURI $(Build.BuildURI)
+    - script: echo SourceBranch $(Build.SourceBranch)
+    - script: echo SourceBranchName $(Build.SourceBranchName)
+    - script: echo SourceVersion $(Build.SourceVersion)
+    - script: echo Repository.Provider $(Build.Repository.Provider)
+    - script: echo RequestedForID $(Build.RequestedForID)
+    - script: echo RequestedFor $(Build.RequestedFor)
+    - script: echo Type $(Build.Type)
+    - script: ls -la $(Build.SourcesDirectory)/.devops
+    - script: ls -la $(Build.ArtifactStagingDirectory)
+- stage: Build
+  jobs:
+  - job: BuildJob
+    steps:
+    - script: echo "building and pushing docker image..."
+- stage: Test
+  jobs:
+  - job: TestJob
+    steps:
+    - script: echo "running test..."
+- stage: CopyArtifacts
+  jobs:
+  - job: CopyArtifactsJob
+    steps:
+    - script: echo "copying artifacts..."
