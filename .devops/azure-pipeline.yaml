@@ -40,7 +40,14 @@ stages:
   jobs:
   - job: BuildJob
     steps:
-    - script: echo "building and pushing docker image..."
+    - script: echo "start building and pushing docker image..."
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: '$(service)-$(tier)'
+        dockerfile: $(Build.SourcesDirectory)/Dockerfile
+        containerRegistry: 'BookingContainerRegistryConnection'
 - stage: Test
   jobs:
   - job: TestJob
@@ -50,4 +57,15 @@ stages:
   jobs:
   - job: CopyArtifactsJob
     steps:
-    - script: echo "copying artifacts..."
+    - script: echo "start copying artifacts..."
+    - task: CopyFiles@2
+      displayName: Copy files in .devops
+      inputs:
+        Contents: |
+          .devops/*.yaml
+        targetFolder: '$(Build.ArtifactStagingDirectory)'    
+
+    - task: PublishBuildArtifacts@1    
+      displayName: 'Publish Artifact: drop'
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
