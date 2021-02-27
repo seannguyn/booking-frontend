@@ -14,7 +14,7 @@ variables:
   service: "booking"
   tier: "frontend"
   build: $(Build.BuildId)
-  tag: ${{startsWith(variables['Build.SourceBranch'], 'refs/tags/')}}
+  tag: ${{startsWith(variables['Build.SourceBranchName'], 'refs/tags/')}}
 
 stages:
 - stage: SandBox
