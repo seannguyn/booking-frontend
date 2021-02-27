@@ -1,3 +1,4 @@
+# kubetpl:syntax:$
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -25,7 +26,7 @@ spec:
     spec:
       containers:
       - name: $SERVICE-$TIER-container
-        image: bookingcontainerregistryy.azurecr.io/$SERVICE-$TIER:$BuildId-ENV
+        image: bookingcontainerregistryy.azurecr.io/$SERVICE-$TIER:$BuildId-$ENV
         ports:
         - containerPort: 3000
 ---
