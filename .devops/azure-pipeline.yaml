@@ -14,12 +14,14 @@ variables:
   service: "booking"
   tier: "frontend"
   build: $(Build.BuildId)
+  tag: ${{startsWith(variables['Build.SourceBranch'], 'refs/tags/')}}
 
 stages:
 - stage: SandBox
   jobs:
   - job: SandBoxJob
     steps:
+    - script: echo tag $(tag)
     - script: echo ArtifactStagingDirectory $(Build.ArtifactStagingDirectory)
     - script: echo SourcesDirectory $(Build.SourcesDirectory)
     - script: echo DefinitionId $(Build.DefinitionId)
