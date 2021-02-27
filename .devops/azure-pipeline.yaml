@@ -13,20 +13,12 @@ trigger:
 variables:
   service: "booking"
   tier: "frontend"
-  build: $(Build.BuildId)
-#   tag: ${{startsWith(variables['Build.SourceBranchName'], 'refs/tags/')}}
 
 stages:
 - stage: SandBox
   jobs:
   - job: SandBoxJob
     steps:
-#     - script: echo tag $(tag)
-    - script: |
-        echo "got here..."
-        git describe --exact-match $(Build.SourceVersion)
-        echo $tag
-        echo "got end..."
     - script: echo ArtifactStagingDirectory $(Build.ArtifactStagingDirectory)
     - script: echo SourcesDirectory $(Build.SourcesDirectory)
     - script: echo DefinitionId $(Build.DefinitionId)
@@ -43,9 +35,9 @@ stages:
     - script: echo Type $(Build.Type)
     - script: ls -la $(Build.SourcesDirectory)/.devops
     - script: ls -la $(Build.ArtifactStagingDirectory)
-- stage: Build
+- stage: BuildAndPush
   jobs:
-  - job: BuildJob
+  - job: BuildAndPushJob
     steps:
     - script: echo "start building and pushing docker image..."
     - task: Docker@2
@@ -55,6 +47,7 @@ stages:
         repository: '$(service)-$(tier)'
         dockerfile: $(Build.SourcesDirectory)/Dockerfile
         containerRegistry: 'BookingContainerRegistryConnection'
+        tags: '$(Build.BuildId)'
 - stage: Test
   jobs:
   - job: TestJob
