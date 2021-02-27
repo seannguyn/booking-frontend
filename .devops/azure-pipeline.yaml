@@ -24,7 +24,7 @@ stages:
 #     - script: echo tag $(tag)
     - script: |
         echo "got here..."
-        tag=$(git describe --exact-match $(Build.SourceVersion))
+        git describe --exact-match $(Build.SourceVersion)
         echo $tag
         echo "got end..."
     - script: echo ArtifactStagingDirectory $(Build.ArtifactStagingDirectory)
