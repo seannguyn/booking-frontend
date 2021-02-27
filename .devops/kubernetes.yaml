@@ -1,39 +1,39 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: booking-frontend
+  name: $SERVICE-$TIER
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: booking-frontend-deployment
+  name: $SERVICE-$TIER-deployment
   labels:
-    service: booking
-    tier: frontend
-  namespace: booking-frontend
+    service: $SERVICE
+    tier: $TIER
+  namespace: $SERVICE-$TIER
 spec:
   selector:
     matchLabels:
-      service: booking
-      tier: frontend
+      service: $SERVICE
+      tier: $TIER
   replicas: 2
   template:
     metadata: 
       labels:
-        service: booking
-        tier: frontend
+        service: $SERVICE
+        tier: $TIER
     spec:
       containers:
-      - name: booking-frontend-container
-        image: bookingcontainerregistryy.azurecr.io/booking-frontend:latest
+      - name: $SERVICE-$TIER-container
+        image: bookingcontainerregistryy.azurecr.io/$SERVICE-$TIER:$BuildId-ENV
         ports:
         - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: booking-frontend-svc
-  namespace: booking-frontend
+  name: $SERVICE-$TIER-svc
+  namespace: $SERVICE-$TIER
 spec:
   type: LoadBalancer
   ports:
@@ -41,5 +41,5 @@ spec:
     port: 80
     targetPort: 3000
   selector:
-    service: booking
-    tier: frontend
+    service: $SERVICE
+    tier: $TIER
