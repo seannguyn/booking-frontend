@@ -19,6 +19,7 @@ stages:
   jobs:
   - job: SandBoxJob
     steps:
+    - script: exit 1
     - script: echo ArtifactStagingDirectory $(Build.ArtifactStagingDirectory)
     - script: echo SourcesDirectory $(Build.SourcesDirectory)
     - script: echo DefinitionId $(Build.DefinitionId)
